@@ -8,5 +8,6 @@
       "package-name": "sixty",
       "changelog-path": "CHANGELOG.md"
     }
-  }
+  },
+  "initial-version": "0.1.0"
 }
