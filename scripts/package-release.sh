@@ -3,7 +3,7 @@
 # to the DMG and to the app (one notarization covers both). Credentials, first match wins:
 #   ASC_KEY_ID + ASC_ISSUER_ID + ASC_KEY_P8_BASE64     App Store Connect API key
 #   APPLE_ID + APPLE_APP_PASSWORD (+ TEAM_ID)          Apple ID with an app-specific password
-# Without credentials it skips notarization.
+# Without credentials it skips notarization, unless REQUIRE_NOTARIZATION=1 (release builds), then it fails.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
@@ -42,6 +42,9 @@ if [[ ${#AUTH[@]} -gt 0 ]]; then
   xcrun stapler staple "$DMG"
   xcrun stapler staple "$APP"
   spctl --assess --type execute --verbose "$APP"
+elif [[ "${REQUIRE_NOTARIZATION:-0}" == "1" ]]; then
+  echo "No notarization credentials (APPLE_ID + APPLE_APP_PASSWORD or ASC_KEY_*): refusing to ship an un-notarized release." >&2
+  exit 1
 else
   echo "No notarization credentials: skipping notarization."
 fi

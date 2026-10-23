@@ -72,6 +72,7 @@ jobs:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_APP_PASSWORD: ${{ secrets.APPLE_APP_PASSWORD }}
           TEAM_ID: JVW2N74WL3
+          REQUIRE_NOTARIZATION: "1"
         run: scripts/package-release.sh
 
       - name: Upload to the GitHub Release
