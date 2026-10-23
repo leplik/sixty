@@ -34,8 +34,9 @@ ENTITLEMENTS="$OUT/Sixty.entitlements"
 cp Resources/Sixty-AppStore.entitlements "$ENTITLEMENTS"
 if [[ -n "${PROFILE:-}" ]]; then
   cp "$PROFILE" "$APP/Contents/embedded.provisionprofile"
-  plutil -insert com.apple.application-identifier -string "$TEAM_ID.$BUNDLE_ID" "$ENTITLEMENTS"
-  plutil -insert com.apple.developer.team-identifier -string "$TEAM_ID" "$ENTITLEMENTS"
+  # plutil reads dots as nesting, so they are escaped.
+  plutil -insert 'com\.apple\.application-identifier' -string "$TEAM_ID.$BUNDLE_ID" "$ENTITLEMENTS"
+  plutil -insert 'com\.apple\.developer\.team-identifier' -string "$TEAM_ID" "$ENTITLEMENTS"
 fi
 plutil -lint "$APP/Contents/Info.plist" "$ENTITLEMENTS" > /dev/null
 
