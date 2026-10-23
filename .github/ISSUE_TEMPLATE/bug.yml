@@ -1,0 +1,31 @@
+name: Bug
+description: Something does not work as described in the README.
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+  - type: input
+    id: version
+    attributes:
+      label: Sixty version
+      description: Sixty menu → "About Sixty", or `/Applications/Sixty.app/Contents/MacOS/Sixty --version`.
+  - type: input
+    id: macos
+    attributes:
+      label: macOS version and Mac model
+  - type: dropdown
+    id: edition
+    attributes:
+      label: Installed from
+      options:
+        - GitHub (DMG)
+        - Homebrew
+        - Mac App Store
+        - built from source

@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Feature idea
+    url: https://github.com/leplik/sixty/discussions
+    about: Ideas are welcome, but Sixty will not get settings, a Skip button or a Quit item. See CONTRIBUTING.md.
