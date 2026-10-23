@@ -1,0 +1,19 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - run: swift --version
+      - name: Test
+        run: swift test
+      - name: Bundle (ad-hoc signed)
+        run: scripts/build-app.sh
+      - name: Smoke test
+        run: build/Sixty.app/Contents/MacOS/Sixty --probe

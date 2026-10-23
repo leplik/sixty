@@ -1,0 +1,68 @@
+/* Menu bar */
+"About Sixty" = "О Sixty";
+"How to turn Sixty off" = "Как выключить Sixty";
+"%ldm" = "%ld мин";
+"%lds" = "%ld с";
+"Next break in %ld min" = "Перерыв через %ld мин";
+"Break in %ld s" = "Перерыв через %ld с";
+"Break waits: call in %@" = "Перерыв ждёт: идёт звонок в %@";
+"Break waits: the camera is on" = "Перерыв ждёт: включена камера";
+"Call ended. Break soon." = "Звонок закончился. Скоро перерыв.";
+"On break" = "Перерыв";
+"Breaks today: %ld" = "Перерывов сегодня: %ld";
+"Emergency exits left today: %ld of %ld" = "Аварийных выходов осталось: %ld из %ld";
+
+/* Warning panel */
+"Next: %@" = "Дальше: %@";
+
+/* Lock screen */
+"Exercise %ld of %ld" = "Упражнение %ld из %ld";
+"Time to move" = "Пора размяться";
+"Emergency exit — %ld left today. Type:" = "Аварийный выход, на сегодня осталось %ld. Набери:";
+"No emergency exits left today." = "Аварийные выходы на сегодня закончились.";
+
+/* Exercises */
+"Standing cat-cow" = "Кошка-корова стоя";
+"Stand with soft knees, hands on your thighs. Round your back like a cat, then arch it. 4 slow times." = "Встань, колени чуть согнуты, руки на бёдрах. Округли спину как кошка, потом прогнись. Медленно, 4 раза.";
+"Standing back bend" = "Прогиб назад стоя";
+"Stand up, palms on your lower back. Lean back gently, then come up. 5 times." = "Встань, ладони на поясницу. Мягко прогнись назад и вернись. 5 раз.";
+"Pelvic tilts" = "Наклоны таза";
+"Stand with soft knees, hands on your hips. Tilt your pelvis forward and back. 8 slow times." = "Встань, колени чуть согнуты, руки на поясе. Наклоняй таз вперёд и назад. Медленно, 8 раз.";
+"Roll down, roll up" = "Позвонок за позвонком";
+"Stand tall. Roll down to the floor one vertebra at a time, then roll back up. 2 times." = "Встань прямо. Скручивайся вниз к полу по одному позвонку, потом так же поднимайся. 2 раза.";
+"Knee to chest" = "Колено к груди";
+"Stand up, hold the desk if you need. Pull one knee to your chest for 5 seconds, then the other." = "Встань, можно держаться за стол. Подтяни колено к груди на 5 секунд, потом другое.";
+"Hip flexor stretch" = "Растяжка сгибателей бедра";
+"Stand in a long step, back heel up. Tuck your pelvis, push the back hip forward. 15 seconds a side." = "Встань в длинный шаг, задняя пятка поднята. Подкрути таз, подай заднее бедро вперёд. По 15 секунд.";
+"6 hip hinges" = "6 наклонов с прямой спиной";
+"Stand with hands on your hips. Push your hips back with a straight back, then stand tall." = "Встань, руки на поясе. Отведи таз назад, спина прямая, потом выпрямись.";
+"Reach up, fold down" = "Вверх и вниз";
+"Stand tall. Stretch to the ceiling, then let your hands hang to the floor. 3 times." = "Встань прямо. Потянись к потолку, потом опусти руки к полу. 3 раза.";
+"Torso twists" = "Повороты корпуса";
+"Stand up, arms loose. Turn left and right, 5 times each." = "Встань, руки свободно. Повернись влево и вправо, по 5 раз.";
+"Hip circles" = "Круги бёдрами";
+"Stand up, hands on your hips. 5 slow circles each way." = "Встань, руки на пояс. 5 медленных кругов в каждую сторону.";
+"Side bends" = "Наклоны в стороны";
+"Stand with feet apart. Slide one hand down your leg, then the other. 6 times." = "Встань, ноги шире плеч. Скользи рукой вниз по ноге, потом другой. 6 раз.";
+"8 slow squats" = "8 медленных приседаний";
+"Stand with feet shoulder-width apart. Sit back, keep your heels on the floor." = "Встань, ноги на ширине плеч. Отводи таз назад, пятки не отрывай от пола.";
+"Shoulder rolls" = "Круги плечами";
+"Stand up. 5 big circles forward, 5 back." = "Встань. 5 больших кругов вперёд и 5 назад.";
+"Look far away" = "Посмотри вдаль";
+"Stand up and walk to a window. Look at the farthest point you can see." = "Встань и подойди к окну. Найди самую дальнюю точку и смотри на неё.";
+"Neck stretch" = "Растяжка шеи";
+"Stand tall. Ear to shoulder, 10 seconds on each side." = "Встань прямо. Наклони голову ухом к плечу, по 10 секунд в каждую сторону.";
+"10 calf raises" = "10 подъёмов на носки";
+"Stand up. Rise on your toes slowly, then lower your heels." = "Встань. Медленно поднимись на носки и опустись на пятки.";
+"Open your chest" = "Раскрой грудь";
+"Stand up. Hands together behind your back, lift them and breathe deeply." = "Встань. Сцепи руки за спиной, подними их и глубоко дыши.";
+"6 desk push-ups" = "6 отжиманий от стола";
+"Stand facing the desk. Hands on its edge, body straight, chest to the desk." = "Встань лицом к столу. Руки на край, тело прямое, грудь к столу.";
+"March in place" = "Шаг на месте";
+"Stand up. Knees high, arms swinging, until the time is up." = "Встань. Колени высоко, руки работают, пока не кончится время.";
+"3 lunges per leg" = "3 выпада на каждую ногу";
+"Stand up. Big step forward, back knee towards the floor, step back." = "Встань. Широкий шаг вперёд, заднее колено к полу, шаг назад.";
+"10 step jacks" = "10 шагов в стороны";
+"Stand up. Step to the side and raise your arms, then step back." = "Встань. Шагни в сторону и подними руки, потом вернись.";
+"Get a glass of water" = "Сходи за водой";
+"Stand up and walk to the kitchen. Drink a full glass." = "Встань и дойди до кухни. Выпей целый стакан.";

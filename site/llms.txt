@@ -1,0 +1,35 @@
+# Sixty
+
+> Sixty is a free, open-source macOS menu-bar app that makes you stand up once an hour. After 60 minutes of active work it shows a 60-second countdown, then locks every screen for 60 seconds with two short exercises. It has no Skip, Postpone or Quit button and no settings. It never locks during a call.
+
+## Key facts
+
+- Price: free. Licence: MIT. Author: Aliaksei Smirnou.
+- Platform: macOS 14 (Sonoma) or later. Native Swift app, no third-party dependencies.
+- Cycle (fixed, not configurable): 60 min of work, 60 s warning (small panel in the top-right corner, no buttons), 60 s break (all screens locked; two 30-second exercises shown by an animated stick figure: first one for the spine and the lower back, then another; nothing repeats from the previous break).
+- Exercises: 22, all done standing, no equipment. Half target the spine and the lower back (standing cat-cow, standing back bend, pelvic tilts, roll down and up, knee to chest, hip flexor stretch, hip hinges); the rest are squats, calf raises, shoulder rolls, neck stretch, desk push-ups, lunges, march in place, a walk to the window or for a glass of water.
+- Away for 5 minutes or more (no keyboard or mouse input, outside a call), or Mac asleep for 5 minutes or more: the work counter goes back to 0.
+- Calls: Sixty never locks during a call. It detects that a camera is in use, or that a known call app (Meet/Zoom/Teams/Webex/FaceTime/Telegram/Slack/WhatsApp/Discord/Signal/Viber/Skype/Granola, also in Chrome, Arc, Dia, Safari, Edge, Brave, Firefox, Vivaldi, Opera) records from the microphone. Teams, Zoom, Webex, FaceTime and phone calls also count while they play audio. The break waits until 2 minutes after the call ends.
+- Dictation tools (Handy, Superwhisper) and recorders (OBS) are not call apps and do not postpone a break.
+- No way out on autopilot: the only exit from a break is an emergency phrase of 4 random words, new for every break, limited to 2 per day.
+- Turning it off on purpose: run `/Applications/Sixty.app/Contents/MacOS/Sixty --disable` in Terminal, or switch it off in System Settings > General > Login Items & Extensions. Open Sixty.app to turn it on again.
+- Multiple monitors: every screen is locked; the emergency phrase field is on the main screen only.
+- Privacy: no telemetry, no audio capture, no permission prompts (no microphone, camera or Accessibility access). It reads only "device is in use" flags.
+- Updates: twice a day Sixty asks the GitHub Releases API for a newer version. That is its only network request, and it sends nothing about the user. Updates install silently between breaks, only if signed with the developer's Apple Developer ID.
+- Languages: English and Russian.
+
+## Install
+
+- Homebrew: `brew install --cask leplik/tap/sixty`
+- Download: https://github.com/leplik/sixty/releases/latest
+
+## Links
+
+- [Website (English)](https://leplik.github.io/sixty/): overview, how it works, FAQ
+- [Website (Russian)](https://leplik.github.io/sixty/ru/): the same in Russian
+- [Source code and README](https://github.com/leplik/sixty): MIT licensed
+- [Releases](https://github.com/leplik/sixty/releases/latest): downloads
+
+## Optional
+
+- [Sitemap](https://leplik.github.io/sixty/sitemap.xml)
