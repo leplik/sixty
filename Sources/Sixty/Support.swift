@@ -1,5 +1,26 @@
 import AppKit
+import os
 import SwiftUI
+
+/// Diagnostics in the macOS unified log. Read them with `Sixty --log`, or
+/// `log show --predicate 'subsystem == "pro.saac.sixty"' --last 6h`.
+/// Everything logged is public on purpose: phases, timings, app and exercise names. Never personal data.
+enum Log {
+    static let cycle = Logger(subsystem: "pro.saac.sixty", category: "cycle")
+    static let calls = Logger(subsystem: "pro.saac.sixty", category: "calls")
+    static let update = Logger(subsystem: "pro.saac.sixty", category: "update")
+    static let agent = Logger(subsystem: "pro.saac.sixty", category: "agent")
+
+    /// `Sixty --log`: the last 6 hours of Sixty's own log lines.
+    static func show() -> Int32 {
+        let log = Process()
+        log.executableURL = URL(fileURLWithPath: "/usr/bin/log")
+        log.arguments = ["show", "--predicate", "subsystem == \"pro.saac.sixty\"", "--last", "6h", "--style", "compact"]
+        guard (try? log.run()) != nil else { return 1 }
+        log.waitUntilExit()
+        return log.terminationStatus
+    }
+}
 
 /// UI text. Sixty is English only; the key is the text. One function keeps every UI string easy to find.
 func L(_ key: String) -> String {

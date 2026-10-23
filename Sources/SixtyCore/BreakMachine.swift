@@ -26,6 +26,14 @@ public struct Moment: Equatable, Sendable {
     }
 }
 
+/// Why the work counter started again from zero.
+public enum ResetReason: String, Sendable {
+    /// No keyboard or mouse input (or a locked screen) for the away threshold, outside a call.
+    case idle
+    /// No ticks for the away threshold: the Mac slept.
+    case sleep
+}
+
 /// A change the UI must react to.
 public enum Transition: Equatable, Sendable {
     case none
@@ -34,7 +42,7 @@ public enum Transition: Equatable, Sendable {
     case breakStarted
     case breakFinished
     /// You were away (or the Mac slept): the cycle starts again from zero.
-    case reset
+    case reset(ResetReason)
 }
 
 /// The break cycle as a pure value type. The app calls `tick` once per second.
@@ -75,7 +83,7 @@ public struct BreakMachine: Sendable {
         if slept || walkedAway {
             let hadProgress = phase != .working || workedSeconds > 0
             startNewCycle()
-            return hadProgress ? .reset : .none
+            return hadProgress ? .reset(slept ? .sleep : .idle) : .none
         }
 
         switch phase {

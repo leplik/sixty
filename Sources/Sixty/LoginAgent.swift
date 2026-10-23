@@ -46,7 +46,7 @@ enum LoginAgent {
             do {
                 try service.register()
             } catch {
-                NSLog("Sixty: cannot register the login agent: \(error.localizedDescription)")
+                Log.agent.error("cannot register the login agent: \(error.localizedDescription, privacy: .public)")
                 return .run
             }
             if service.status == .requiresApproval {
@@ -70,14 +70,14 @@ enum LoginAgent {
             do {
                 try service.register()
             } catch {
-                NSLog("Sixty: cannot register the login agent: \(error.localizedDescription)")
+                Log.agent.error("cannot register the login agent: \(error.localizedDescription, privacy: .public)")
                 continue
             }
             for _ in 0..<10 {
                 Thread.sleep(forTimeInterval: 1)
                 if agentPID() != nil { return true }
             }
-            NSLog("Sixty: the login agent did not start (attempt \(attempt) of 3)")
+            Log.agent.error("the login agent did not start (attempt \(attempt) of 3)")
         }
         return false
     }

@@ -53,7 +53,7 @@ final class Updater {
             nextCheck = UpdatePolicy.nextCheck(after: Date(), succeeded: result.checked)
             staged = result.staged
             busy = false
-            if let staged = result.staged { NSLog("Sixty: update \(staged.version) is ready") }
+            if let staged = result.staged { Log.update.notice("update \(staged.version.description, privacy: .public) is ready") }
         }
     }
 
@@ -61,7 +61,7 @@ final class Updater {
         busy = true
         do {
             _ = try FileManager.default.replaceItemAt(Bundle.main.bundleURL, withItemAt: update.app)
-            NSLog("Sixty: updated to \(update.version), restarting")
+            Log.update.notice("updated to \(update.version.description, privacy: .public), restarting")
             beforeRestart()
             // A new process, outside our launchd job, registers the agent for the new signature
             // and launchd starts the new version. `open -n` keeps it out of our process group.
@@ -71,7 +71,7 @@ final class Updater {
             try open.run()
             exit(0)
         } catch {
-            NSLog("Sixty: cannot install update \(update.version): \(error.localizedDescription)")
+            Log.update.error("cannot install update \(update.version.description, privacy: .public): \(error.localizedDescription, privacy: .public)")
             staged = nil
             busy = false
             nextCheck = UpdatePolicy.nextCheck(after: Date(), succeeded: false)
@@ -103,7 +103,7 @@ final class Updater {
             else { return result }
             result.staged = try await stage(update)
         } catch {
-            NSLog("Sixty: update check failed: \(error.localizedDescription)")
+            Log.update.error("update check failed: \(error.localizedDescription, privacy: .public)")
         }
         return result
     }
@@ -131,7 +131,7 @@ final class Updater {
               isSignedBySAAC(app),
               shortVersion(of: app) == update.version.description
         else {
-            NSLog("Sixty: rejected update \(update.version): bad archive, signature or version")
+            Log.update.error("rejected update \(update.version.description, privacy: .public): bad archive, signature or version")
             try? FileManager.default.removeItem(at: folder)
             return nil
         }

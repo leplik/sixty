@@ -59,7 +59,7 @@ struct BreakMachineTests {
         var d = Driver()
         d.run(seconds: 40)
         d.step(idle: 30)
-        #expect(d.log == [.reset])
+        #expect(d.log == [.reset(.idle)])
         #expect(d.machine.workedSeconds == 0)
         #expect(d.machine.phase == .working)
     }
@@ -76,7 +76,7 @@ struct BreakMachineTests {
         d.run(seconds: 40)
         d.clock += 30 // the Mac slept, no ticks
         d.step(inCall: true)
-        #expect(d.log == [.reset])
+        #expect(d.log == [.reset(.sleep)])
         #expect(d.machine.workedSeconds == 0)
     }
 
@@ -180,6 +180,19 @@ struct BreakMachineTests {
         d.clock -= 3600
         d.step()
         #expect(d.machine.workedSeconds == 9)
+    }
+
+    @Test func theRealCycleToleratesNineteenMinutesWithoutInput() {
+        // Reading, watching a video or a long think is still sitting: only 20 minutes away count as a break.
+        #expect(Timing.standard.awayThreshold == 20 * 60)
+        var m = BreakMachine(timing: .standard)
+        let t0 = start
+        _ = m.tick(Moment(now: t0, idleSeconds: 0, inCall: false))
+        let quiet = m.tick(Moment(now: t0.addingTimeInterval(60), idleSeconds: 19 * 60, inCall: false))
+        #expect(quiet == .none)
+        #expect(m.workedSeconds == 60)
+        let away = m.tick(Moment(now: t0.addingTimeInterval(61), idleSeconds: 20 * 60, inCall: false))
+        #expect(away == .reset(.idle))
     }
 
     @Test func secondsUntilBreak() {

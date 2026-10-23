@@ -9,6 +9,7 @@ public struct Timing: Sendable, Equatable {
     /// How long the screens stay locked.
     public var breakDuration: TimeInterval
     /// No input for this long, outside a call, means you already took a break.
+    /// Reading or watching for a while is still sitting, so the real cycle uses 20 minutes.
     public var awayThreshold: TimeInterval
     /// Wait after a call ends before the warning starts.
     public var callGrace: TimeInterval
@@ -36,7 +37,7 @@ public struct Timing: Sendable, Equatable {
         workInterval: 60 * 60,
         warningDuration: 60,
         breakDuration: 60,
-        awayThreshold: 5 * 60,
+        awayThreshold: 20 * 60,
         callGrace: 2 * 60,
         breakWatchdog: 90
     )

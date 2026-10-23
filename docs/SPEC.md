@@ -28,7 +28,7 @@ WORKING ──60 min of work──▶ in a call? ──no──▶ WARNING ─�
    │                            │                │
    │                            └────────────────┘ call ended + 2 min
    │
-   └── away ≥ 5 min (no input and no call) or Mac asleep ≥ 5 min → work counter = 0
+   └── away ≥ 20 min (no input and no call) or Mac asleep ≥ 20 min → work counter = 0
 ```
 
 ### 3.2 Rules
@@ -38,15 +38,15 @@ WORKING ──60 min of work──▶ in a call? ──no──▶ WARNING ─�
 | Work interval | 60 min of active time |
 | Warning | 60 s, small panel in the top-right corner, no buttons, click-through |
 | Break | 60 s, all screens locked |
-| Away threshold | 5 min without keyboard or mouse input, outside a call |
+| Away threshold | 20 min without keyboard or mouse input, outside a call (was 5 min until 0.1.2: reading or watching reset the hour) |
 | Grace after a call | 2 min, then the normal 60 s warning |
 | Watchdog | a break never lasts more than 90 s, even if the state machine fails |
 | Emergency exits | 2 per day |
 
-- Sixty counts only active time. If you are away for 5 min or more, the counter goes back to 0. You already took a break.
+- Sixty counts only active time. If you are away for 20 min or more, the counter goes back to 0. You already took a break. Shorter idle time counts as work: reading or watching is still sitting.
 - No input during a call does not count as "away". You can listen to a meeting without touching the keyboard.
 - If the screen is locked, the time since the lock counts as idle time.
-- If the Mac sleeps for 5 min or more, the counter goes back to 0.
+- If the Mac sleeps for 20 min or more, the counter goes back to 0.
 - If a call starts during the warning, the break is postponed.
 - A call that starts during a break does not end the break. You cannot answer it. You call back after 60 s.
 - There are no working hours. Sixty only counts time at the computer, so weekends need no special rule.
@@ -155,6 +155,16 @@ process starts
                      └─fail─▶ run here; open Login Items settings if approval is needed
 ```
 
+## 9a. Diagnostics
+
+Sixty writes to the macOS unified log, subsystem `pro.saac.sixty`, level `notice`, so the lines are kept:
+
+- `cycle`: start (version, restored work), warning (with the two exercises), break started and finished, postponed (with the call signal), every reset with its reason (`no input for N min`, `screen locked`, `the Mac slept`), "Take a Break Now", emergency exits, watchdog; plus a heartbeat every 10 minutes (phase, minutes worked, idle seconds, call signal, breaks today).
+- `calls`: every change of the call signal (`none -> Telegram (microphone)`).
+- `update`, `agent`: update checks and installs, login agent registration.
+
+`Sixty --log` prints the last 6 hours. Everything logged is public: phases, timings, app and exercise names; never personal data.
+
 ## 10. Localisation
 
 English only: the app, the website, the docs and the store listing. UI strings go through `L()` with the English text as the key.
@@ -236,7 +246,8 @@ Release steps: `docs/RELEASING.md`, section "Mac App Store".
 
 ## 15. Known limitations
 
-- Watching a long video without input outside a call counts as "away" after 5 min. The counter resets and that break is skipped.
+- Watching a video without input outside a call counts as "away" after 20 min. The counter resets and that break is skipped.
+- A short absence (under 20 min) counts as work, so the next break comes a little early. That errs on the safe side.
 - A browser that records from the microphone for something that is not a call (for example voice input on a website) postpones the break.
 - If a meeting app keeps its audio output open when no call is active, every break waits. The menu shows the reason. Check this for Teams before v1.
 - macOS 14 made app activation cooperative. If `activate(ignoringOtherApps:)` does not take the focus, the screens are still covered, but keystrokes may go to the app below until the first click. Verify on macOS 14, 15 and 26.

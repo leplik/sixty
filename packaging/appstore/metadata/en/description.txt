@@ -9,7 +9,7 @@ NO SKIP BUTTON
 Break reminders with a Skip button get skipped. Sixty has none, and no settings to turn breaks down. For a real emergency, type four random words shown on the lock screen — new words every time, twice a day at most.
 
 SMART ABOUT YOUR DAY
-• Only active time counts. Away for five minutes? You already had your break, and the hour starts again.
+• Only active time counts. Away for twenty minutes? You already had your break, and the hour starts again.
 • Want to move now? Choose Take a Break Now in the menu.
 • Works with several displays and full-screen apps.
 

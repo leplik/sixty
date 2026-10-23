@@ -17,6 +17,7 @@ enum SixtyApp {
         if arguments.contains("--reregister"), LoginAgent.reregister() { exit(0) }
         #endif
         if arguments.contains("--probe") { exit(Probe.run()) }
+        if arguments.contains("--log") { exit(Log.show()) }
         if let flag = arguments.firstIndex(of: "--render-figures") {
             exit(FigureSheets.render(to: arguments.indices.contains(flag + 1) ? arguments[flag + 1] : "figures"))
         }

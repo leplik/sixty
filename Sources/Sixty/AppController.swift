@@ -24,6 +24,7 @@ final class AppController {
     private var plan: BreakPlan?
     private var lastExerciseIDs: Set<String> = []
     private var savedAt = Date.distantPast
+    private var heartbeatAt = Date.distantPast
 
     init(timing: Timing, store: Store, demo: Bool) {
         let now = Date()
@@ -35,6 +36,10 @@ final class AppController {
             workedSeconds: store.restoredWork(now: now, awayThreshold: timing.awayThreshold)
         )
         stats = store.stats(today: DailyStats.dayKey(for: now))
+        Log.cycle.notice("""
+            started \(Links.version, privacy: .public), \(demo ? "demo" : "standard", privacy: .public) cycle, \
+            restored \(Int(self.machine.workedSeconds / 60)) min of work, breaks today \(self.stats.breaks)
+            """)
         blocker.onEscape = { [weak self] in self?.escape() }
         blocker.onWatchdog = { [weak self] in self?.watchdogFired() }
         menu.onBreakNow = { [weak self] in self?.takeBreakNow() }
@@ -63,9 +68,14 @@ final class AppController {
     private func tick() {
         let now = Date()
         stats.roll(to: DailyStats.dayKey(for: now))
-        signal = calls.signal(at: now)
-        let moment = Moment(now: now, idleSeconds: presence.idleSeconds(at: now), inCall: signal != nil)
-        handle(machine.tick(moment))
+        let newSignal = calls.signal(at: now)
+        if newSignal != signal {
+            Log.calls.notice("call: \(Self.describe(self.signal), privacy: .public) -> \(Self.describe(newSignal), privacy: .public)")
+        }
+        signal = newSignal
+        let idle = presence.idleSeconds(at: now)
+        let workedBefore = machine.workedSeconds
+        handle(machine.tick(Moment(now: now, idleSeconds: idle, inCall: signal != nil)), workedBefore: workedBefore, idle: idle)
 
         switch machine.phase {
         case .warning: warning.update(now: now)
@@ -79,9 +89,19 @@ final class AppController {
 
         let age = now.timeIntervalSince(savedAt)
         if age >= 10 || age < 0 { saveWork(now) }
+
+        let sinceHeartbeat = now.timeIntervalSince(heartbeatAt)
+        if sinceHeartbeat >= 600 || sinceHeartbeat < 0 {
+            heartbeatAt = now
+            Log.cycle.notice("""
+                state: \(self.describe(self.machine.phase, now: now), privacy: .public), \
+                worked \(Int(self.machine.workedSeconds / 60)) min, idle \(Int(idle)) s, \
+                call \(Self.describe(self.signal), privacy: .public), breaks today \(self.stats.breaks)
+                """)
+        }
     }
 
-    private func handle(_ transition: Transition) {
+    private func handle(_ transition: Transition, workedBefore: TimeInterval = 0, idle: TimeInterval = 0) {
         switch transition {
         case .none:
             break
@@ -90,30 +110,69 @@ final class AppController {
             self.plan = plan
             lastExerciseIDs = Set(plan.exercises.map(\.id))
             if case .warning(let endsAt) = machine.phase { warning.show(endsAt: endsAt, plan: plan) }
-        case .postponed, .reset:
+            Log.cycle.notice("warning: break in \(Int(self.timing.warningDuration)) s, \(Self.describe(plan), privacy: .public)")
+        case .postponed:
             warning.hide()
+            Log.cycle.notice("break due, waiting for the call: \(Self.describe(self.signal), privacy: .public)")
+        case .reset(let reason):
+            warning.hide()
+            switch reason {
+            case .idle:
+                Log.cycle.notice("""
+                    work counter reset after \(Int(workedBefore / 60)) min: no input for \(Int(idle / 60)) min\
+                    \(self.presence.isLocked ? ", screen locked" : "", privacy: .public)
+                    """)
+            case .sleep:
+                Log.cycle.notice("work counter reset after \(Int(workedBefore / 60)) min: the Mac slept")
+            }
         case .breakStarted:
             warning.hide()
             if case .onBreak(let endsAt) = machine.phase {
                 let left = stats.escapesLeft
+                let plan = plan ?? Exercises.plan(duration: timing.breakDuration, avoiding: lastExerciseIDs)
                 blocker.show(
                     endsAt: endsAt,
-                    plan: plan ?? Exercises.plan(duration: timing.breakDuration, avoiding: lastExerciseIDs),
+                    plan: plan,
                     phrase: left > 0 ? EscapePhrase.make() : nil,
                     escapesLeft: left,
                     watchdogAfter: timing.breakWatchdog
                 )
+                Log.cycle.notice("break started: \(Self.describe(plan), privacy: .public), emergency exits left \(left)")
             }
         case .breakFinished:
             blocker.hide()
             stats.recordBreak()
             store.save(stats)
             saveWork(Date())
+            Log.cycle.notice("break finished, breaks today \(self.stats.breaks)")
+        }
+    }
+
+    private static func describe(_ signal: CallSignal?) -> String {
+        switch signal {
+        case nil: "none"
+        case .camera: "camera"
+        case .microphone(let app): "\(app) (microphone)"
+        case .speaker(let app): "\(app) (speaker)"
+        }
+    }
+
+    private static func describe(_ plan: BreakPlan) -> String {
+        plan.exercises.map(\.id).joined(separator: " + ")
+    }
+
+    private func describe(_ phase: Phase, now: Date) -> String {
+        switch phase {
+        case .working: "working, next break in \(Int(ceil(machine.secondsUntilBreak / 60))) min"
+        case .warning(let endsAt): "warning, \(Int(endsAt.timeIntervalSince(now))) s left"
+        case .postponed(let ended): ended == nil ? "postponed, call running" : "postponed, call ended"
+        case .onBreak(let endsAt): "on break, \(Int(endsAt.timeIntervalSince(now))) s left"
         }
     }
 
     /// "Take a Break Now": a fresh plan, then the normal break.
     func takeBreakNow() {
+        Log.cycle.notice("Take a Break Now chosen in the menu")
         let plan = Exercises.plan(duration: timing.breakDuration, avoiding: lastExerciseIDs)
         self.plan = plan
         lastExerciseIDs = Set(plan.exercises.map(\.id))
@@ -123,6 +182,7 @@ final class AppController {
 
     private func escape() {
         guard machine.isOnBreak, stats.recordEscape() else { return }
+        Log.cycle.notice("emergency exit used, \(self.stats.escapesLeft) left today")
         machine.endBreakEarly()
         blocker.hide()
         store.save(stats)
@@ -133,6 +193,7 @@ final class AppController {
     /// The lock is already gone. Bring the state machine in line; the break counts.
     private func watchdogFired() {
         guard machine.endBreakEarly() else { return }
+        Log.cycle.error("watchdog ended a break that ran too long")
         stats.recordBreak()
         store.save(stats)
         saveWork(Date())

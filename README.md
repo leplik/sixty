@@ -39,7 +39,7 @@ WORKING ──60 min of work──▶ in a call? ──no──▶ WARNING ─�
                            POSTPONED ───────────┘ call ended + 2 min
 ```
 
-1. Sixty counts only active time. If you are away for 5 minutes or more, the counter starts again. You already took your break.
+1. Sixty counts only active time. If you are away for 20 minutes or more, the counter starts again. You already took your break. Reading or watching without touching the keyboard still counts as work.
 2. After 60 minutes, a small countdown appears in the top-right corner for 60 seconds. It has no buttons.
 3. Then every screen locks for 60 seconds. An animated figure shows two exercises, 30 seconds each, always done standing. The first one moves the spine and the lower back, which sitting hurts most: standing cat-cow, back bends, pelvic tilts, hip hinges. The second is anything else: squats, calf raises, a walk to the window. Nothing repeats from the previous break.
 4. After the minute, you are back where you were.
@@ -66,6 +66,8 @@ Dictation tools (Handy, Superwhisper, macOS Dictation) and recorders (OBS) are n
 When a break waits, the menu bar shows why: *Break waits: call in Microsoft Teams*. When the call ends, Sixty waits 2 more minutes, then starts the normal countdown.
 
 Your call app is not detected? Run `/Applications/Sixty.app/Contents/MacOS/Sixty --probe` during a call and [open an issue](https://github.com/leplik/sixty/issues) with the output.
+
+No break for a long time and you don't know why? `/Applications/Sixty.app/Contents/MacOS/Sixty --log` prints the last 6 hours: warnings, breaks, calls that postponed them, and every reset of the counter with its reason.
 
 ## The emergency exit
 

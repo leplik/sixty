@@ -19,6 +19,8 @@ final class PresenceMonitor {
         })
     }
 
+    var isLocked: Bool { lockedSince != nil }
+
     func idleSeconds(at now: Date) -> TimeInterval {
         let input = CGEventSource.secondsSinceLastEventType(.combinedSessionState, eventType: anyInput)
         let locked = lockedSince.map { max(0, now.timeIntervalSince($0)) } ?? 0

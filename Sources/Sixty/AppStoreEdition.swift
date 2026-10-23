@@ -27,7 +27,7 @@ enum LoginItem {
                 try SMAppService.mainApp.unregister()
             }
         } catch {
-            NSLog("Sixty: cannot change the login item: \(error.localizedDescription)")
+            Log.agent.error("cannot change the login item: \(error.localizedDescription, privacy: .public)")
         }
     }
 

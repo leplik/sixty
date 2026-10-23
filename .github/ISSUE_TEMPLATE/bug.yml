@@ -11,6 +11,12 @@ body:
     id: steps
     attributes:
       label: Steps to reproduce
+  - type: textarea
+    id: log
+    attributes:
+      label: Sixty's log
+      description: Run `/Applications/Sixty.app/Contents/MacOS/Sixty --log` and paste the lines around the problem. They show phases, breaks, calls and resets, no personal data.
+      render: text
   - type: input
     id: version
     attributes:
