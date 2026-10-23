@@ -27,7 +27,9 @@ merge the release PR ──▶ tag vX.Y.Z + GitHub Release
 |---|---|
 | `DEVELOPER_ID_P12_BASE64` | The "Developer ID Application" certificate with its private key, exported from Keychain Access as `.p12`, then `base64 -i cert.p12 \| pbcopy` |
 | `DEVELOPER_ID_P12_PASSWORD` | The password you set for the `.p12` export |
-| `ASC_KEY_ID` | App Store Connect → Users and Access → Integrations → Team Keys: the key ID (role "Developer" is enough) |
+| `APPLE_ID` | For notarization: the Apple ID of a team member (Developer role or higher). Used when there is no API key |
+| `APPLE_APP_PASSWORD` | An app-specific password for that Apple ID: appleid.apple.com → Sign-In and Security → App-Specific Passwords |
+| `ASC_KEY_ID` | Optional, instead of the Apple ID: App Store Connect → Users and Access → Integrations → Team Keys: the key ID. Only the Account Holder can enable API access for the team |
 | `ASC_ISSUER_ID` | The issuer ID on the same page |
 | `ASC_KEY_P8_BASE64` | The downloaded `AuthKey_<id>.p8`, then `base64 -i AuthKey_<id>.p8 \| pbcopy` |
 | `HOMEBREW_TAP_DEPLOY_KEY` | Private half of an SSH deploy key with write access to `leplik/homebrew-tap` only. Create: `ssh-keygen -t ed25519 -N '' -f k`, `gh repo deploy-key add k.pub -R leplik/homebrew-tap --allow-write`, `gh secret set HOMEBREW_TAP_DEPLOY_KEY -R leplik/sixty < k`, delete `k` |
