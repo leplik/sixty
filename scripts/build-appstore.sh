@@ -39,6 +39,9 @@ if [[ -n "${PROFILE:-}" ]]; then
   plutil -insert 'com\.apple\.developer\.team-identifier' -string "$TEAM_ID" "$ENTITLEMENTS"
 fi
 plutil -lint "$APP/Contents/Info.plist" "$ENTITLEMENTS" > /dev/null
+# App Store Connect rejects any file with com.apple.quarantine (error 91109); a profile downloaded
+# from the browser carries it. Clear all extended attributes before signing.
+xattr -cr "$APP"
 
 codesign --force --options runtime --entitlements "$ENTITLEMENTS" --sign "$APP_SIGN_IDENTITY" "$APP"
 codesign --verify --strict --verbose=1 "$APP"
