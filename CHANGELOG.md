@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/leplik/sixty/compare/v0.1.0...v0.1.1) (2026-10-23)
+
+
+### Bug Fixes
+
+* English only — app, website, media and store screenshots ([be1623f](https://github.com/leplik/sixty/commit/be1623fb5ba2643468ae15eff63bd766f988ce71))
+
 ## 0.1.0 (2026-10-23)
 
 
