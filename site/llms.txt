@@ -18,6 +18,10 @@
 - Updates: twice a day Sixty asks the GitHub Releases API for a newer version. That is its only network request, and it sends nothing about the user. Updates install silently between breaks, only if signed with the developer's Apple Developer ID.
 - Language: English.
 
+## Why it exists
+
+In the author's words: "My back hurt so much that I could not rest even at night. Swimming, massage and the gym did not help. Then I asked Claude, the AI assistant by Anthropic, what to do. It looked at how many hours I work and how intensely, and gave me a simple rule: move for 60 seconds every 60 minutes. The pain was gone in two days. Sixty makes sure I keep that rule." The author notes that this is a personal story, not medical advice.
+
 ## Install
 
 - Homebrew: `brew install --cask leplik/tap/sixty`
