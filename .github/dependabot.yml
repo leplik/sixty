@@ -4,5 +4,9 @@ updates:
     directory: /
     schedule:
       interval: monthly
+    # One pull request for all action updates; major versions need a read of their changelogs before merging.
+    groups:
+      actions:
+        patterns: ["*"]
     commit-message:
       prefix: ci
