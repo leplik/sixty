@@ -31,3 +31,10 @@ jobs:
           path: site
       - id: deployment
         uses: actions/deploy-pages@v5
+
+  # Tells Bing, Yandex, Seznam and Naver about the new pages (Google reads the sitemap itself).
+  indexnow:
+    needs: deploy
+    uses: leplik/leplik.github.io/.github/workflows/indexnow.yml@main
+    with:
+      sitemap: https://leplik.github.io/sixty/sitemap.xml
