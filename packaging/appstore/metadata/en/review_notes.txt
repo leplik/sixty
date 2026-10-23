@@ -1,0 +1,5 @@
+Sixty locks the screen for 60 seconds once an hour so that the user stands up. To see the lock at once, open the menu bar item (a standing figure with minutes) and choose "Take a Break Now".
+
+During the break the user can leave early by typing the four words shown at the bottom of the screen (twice a day). Sixty does not lock during calls: it reads which apps use the microphone through the public CoreAudio process list; it never records audio. It asks once, at the first launch, whether to start at login.
+
+To quit: menu → "Quit Sixty…", then type the phrase shown. The phrase prevents quitting on autopilot, which is the purpose of the app.

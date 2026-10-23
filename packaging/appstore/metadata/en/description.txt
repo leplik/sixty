@@ -1,0 +1,17 @@
+Sixty makes you stand up once an hour — and you can't skip it on autopilot.
+
+After 60 minutes at your Mac, a small countdown appears in the corner. A minute later every screen locks for 60 seconds and an animated figure shows two standing exercises, 30 seconds each. The first one moves your spine and lower back, which sitting hurts most: standing cat-cow, back bends, pelvic tilts, hip hinges. The second is something else: squats, calf raises, a walk to the window, a glass of water. Then you are back where you were.
+
+NEVER DURING A CALL
+Sixty sees when an app uses your microphone for a call — in your browser or in a call app — and waits until two minutes after the call ends. It reads only the "in use" status of your devices. It never records or listens to anything.
+
+NO SKIP BUTTON
+Break reminders with a Skip button get skipped. Sixty has none, and no settings to turn breaks down. For a real emergency, type four random words shown on the lock screen — new words every time, twice a day at most.
+
+SMART ABOUT YOUR DAY
+• Only active time counts. Away for five minutes? You already had your break, and the hour starts again.
+• Want to move now? Choose Take a Break Now in the menu.
+• Works with several displays and full-screen apps.
+
+PRIVATE
+No account, no analytics, no network access. Sixty is open source.

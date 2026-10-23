@@ -70,4 +70,4 @@ xcrun altool --upload-package build/appstore/Sixty-0.1.0.pkg --type macos --apiK
 
 `altool` looks for the key as `~/.appstoreconnect/private_keys/AuthKey_<ASC_KEY_ID>.p8`. The installer certificate may be named "Mac Installer Distribution: …" instead; `security find-identity -v` shows the exact name.
 
-Review notes to paste: "Sixty locks the screen for 60 seconds once an hour so the user stands up. To see it at once, open the menu bar item and choose Take a Break Now. During the break, the user can leave early by typing the four words shown at the bottom (2 times a day). Sixty does not lock during calls: it reads which apps use the microphone (CoreAudio process list); it never records audio. Quit: menu → Quit Sixty…, then type the phrase."
+Listing texts (name, subtitle, promotional text, description, keywords, URLs, copyright, review notes) are in `packaging/appstore/metadata/en/`, checked against Apple's length limits. Screenshots: `packaging/appstore/screenshots/en/` (`make media` renders them).
