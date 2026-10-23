@@ -1,3 +1,4 @@
+#if !APP_STORE  // The App Store edition uses LoginItem (AppStoreEdition.swift).
 import AppKit
 import ServiceManagement
 
@@ -116,3 +117,4 @@ enum LoginAgent {
         }
     }
 }
+#endif

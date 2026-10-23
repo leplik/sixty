@@ -6,9 +6,16 @@ import SixtyCore
 enum SixtyApp {
     static func main() {
         let arguments = CommandLine.arguments
+        #if APP_STORE
+        if arguments.contains("--disable") {
+            LoginItem.setEnabled(false)
+            exit(0)
+        }
+        #else
         if arguments.contains("--disable") { exit(LoginAgent.disable()) }
         // If the agent does not come up, this process carries on as Sixty, so no break is lost.
         if arguments.contains("--reregister"), LoginAgent.reregister() { exit(0) }
+        #endif
         if arguments.contains("--probe") { exit(Probe.run()) }
         if let flag = arguments.firstIndex(of: "--render-figures") {
             exit(FigureSheets.render(to: arguments.indices.contains(flag + 1) ? arguments[flag + 1] : "figures"))
@@ -32,6 +39,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         let demo = ProcessInfo.processInfo.environment["SIXTY_DEMO"] == "1"
+        #if APP_STORE
+        if !demo, LoginItem.anotherInstanceIsRunning {
+            NSApp.terminate(nil)
+            return
+        }
+        #else
         if !demo {
             switch LoginAgent.bootstrap() {
             case .exit:
@@ -50,9 +63,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 }
             }
         }
+        #endif
         let controller = AppController(timing: demo ? .demo : .standard, store: Store(demo: demo), demo: demo)
         controller.start()
         self.controller = controller
+        #if APP_STORE
+        if !demo { LoginItem.askOnce() }
+        #endif
     }
 }
 
@@ -60,7 +77,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 enum Probe {
     static func run() -> Int32 {
         let snapshot = DeviceSnapshot(audioClients: AudioClients.current(), cameraInUse: Camera.inUse())
-        print("Camera in use: \(snapshot.cameraInUse ? "yes" : "no")")
+        print("Cameras found: \(Camera.count()), in use: \(snapshot.cameraInUse ? "yes" : "no")")
         if snapshot.audioClients.isEmpty { print("No app uses the microphone or the speaker.") }
         for client in snapshot.audioClients {
             var devices: [String] = []

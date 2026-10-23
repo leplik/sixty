@@ -1,3 +1,4 @@
+#if !APP_STORE  // The App Store delivers updates itself.
 import AppKit
 import Security
 import SixtyCore
@@ -163,3 +164,4 @@ final class Updater {
         return info["CFBundleShortVersionString"] as? String
     }
 }
+#endif

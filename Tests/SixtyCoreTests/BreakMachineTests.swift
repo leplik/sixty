@@ -149,6 +149,25 @@ struct BreakMachineTests {
         #expect(d.machine.workedSeconds == 0)
     }
 
+    @Test func aBreakCanStartAnyTimeFromTheMenu() {
+        var d = Driver()
+        d.run(seconds: 30)
+        #expect(d.machine.startBreakNow(at: d.now) == .breakStarted)
+        #expect(d.machine.phase == .onBreak(endsAt: d.now.addingTimeInterval(10)))
+        // A second request during the break changes nothing.
+        #expect(d.machine.startBreakNow(at: d.now) == .none)
+        d.run(seconds: 11)
+        #expect(d.log == [.breakFinished])
+        #expect(d.machine.workedSeconds == 0)
+    }
+
+    @Test func aBreakCanStartDuringTheWarning() {
+        var d = Driver()
+        d.run(seconds: 62)
+        #expect(d.machine.startBreakNow(at: d.now) == .breakStarted)
+        #expect(d.machine.isOnBreak)
+    }
+
     @Test func restoredProgressContinuesTheCycle() {
         var d = Driver(machine: BreakMachine(timing: timing, workedSeconds: 59))
         d.run(seconds: 2)

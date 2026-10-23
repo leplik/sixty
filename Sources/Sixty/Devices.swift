@@ -57,6 +57,10 @@ enum AudioClients {
 
 /// Whether any app uses any camera. Needs no camera permission.
 enum Camera {
+    static func count() -> Int {
+        devices().count
+    }
+
     static func inUse() -> Bool {
         devices().contains(where: isRunning)
     }

@@ -1,5 +1,6 @@
 /* Menu bar */
 "About Sixty" = "О Sixty";
+"Take a Break Now" = "Перерыв сейчас";
 "How to turn Sixty off" = "Как выключить Sixty";
 "%ldm" = "%ld мин";
 "%lds" = "%ld с";
@@ -11,6 +12,16 @@
 "On break" = "Перерыв";
 "Breaks today: %ld" = "Перерывов сегодня: %ld";
 "Emergency exits left today: %ld of %ld" = "Аварийных выходов осталось: %ld из %ld";
+
+/* App Store edition */
+"Start at Login" = "Запускать при входе";
+"Quit Sixty…" = "Выйти из Sixty…";
+"Quit Sixty" = "Выход из Sixty";
+"To quit Sixty, type:" = "Чтобы выйти из Sixty, набери:";
+"Cancel" = "Отмена";
+"Start Sixty when you log in?" = "Запускать Sixty при входе в систему?";
+"Sixty works only while it runs. You can change this later in the Sixty menu." = "Sixty работает, только пока запущен. Это можно поменять потом в меню Sixty.";
+"Not Now" = "Не сейчас";
 
 /* Warning panel */
 "Next: %@" = "Дальше: %@";

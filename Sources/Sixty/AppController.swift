@@ -16,7 +16,9 @@ final class AppController {
     private let warning = WarningPanel()
     private let blocker = Blocker()
 
+    #if !APP_STORE
     private var updater: Updater?
+    #endif
     private var timer: Timer?
     private var signal: CallSignal?
     private var plan: BreakPlan?
@@ -35,6 +37,8 @@ final class AppController {
         stats = store.stats(today: DailyStats.dayKey(for: now))
         blocker.onEscape = { [weak self] in self?.escape() }
         blocker.onWatchdog = { [weak self] in self?.watchdogFired() }
+        menu.onBreakNow = { [weak self] in self?.takeBreakNow() }
+        #if !APP_STORE
         if !demo, Updater.isSupported {
             updater = Updater { [weak self] in
                 guard let self else { return }
@@ -42,6 +46,7 @@ final class AppController {
                 self.saveWork(Date())
             }
         }
+        #endif
     }
 
     func start() {
@@ -68,7 +73,9 @@ final class AppController {
         case .working, .postponed: break
         }
         menu.render(menuContent(now: now))
+        #if !APP_STORE
         updater?.tick(now: now, phase: machine.phase)
+        #endif
 
         let age = now.timeIntervalSince(savedAt)
         if age >= 10 || age < 0 { saveWork(now) }
@@ -103,6 +110,15 @@ final class AppController {
             store.save(stats)
             saveWork(Date())
         }
+    }
+
+    /// "Take a Break Now": a fresh plan, then the normal break.
+    func takeBreakNow() {
+        let plan = Exercises.plan(duration: timing.breakDuration, avoiding: lastExerciseIDs)
+        self.plan = plan
+        lastExerciseIDs = Set(plan.exercises.map(\.id))
+        handle(machine.startBreakNow(at: Date()))
+        menu.render(menuContent(now: Date()))
     }
 
     private func escape() {

@@ -43,6 +43,8 @@ WORKING ──60 min of work──▶ in a call? ──no──▶ WARNING ─�
 3. Then every screen locks for 60 seconds. An animated figure shows two exercises, 30 seconds each, always done standing. The first one moves the spine and the lower back, which sitting hurts most: standing cat-cow, back bends, pelvic tilts, hip hinges. The second is anything else: squats, calf raises, a walk to the window. Nothing repeats from the previous break.
 4. After the minute, you are back where you were.
 
+Want to move now? Choose **Take a Break Now** in the menu. It adds a break; there is no button that removes one.
+
 ## Never during a call
 
 Sixty checks every 2 seconds which apps use the microphone, the speaker and the camera. It reads only the "in use" flags that macOS publishes; it never reads audio.

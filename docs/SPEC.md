@@ -217,13 +217,22 @@ every 12 h (1 h after a failed check)
 - GEO (answers in AI assistants): `llms.txt` with a plain-text summary, short factual answers in the FAQ, a clear "how it works" section, and explicit facts (price, platform, permissions, licence). The README repeats the same facts.
 - Repository metadata: description, homepage and topics (`macos`, `break-reminder`, `stand-up-reminder`, `stretch`, `screen-lock`, `menu-bar-app`, `swift`, `productivity`, `health`).
 
-## 14. Mac App Store
+## 14. Mac App Store edition
 
-Not in v1. Three decisions conflict with App Store rules:
+Same code, built with `-DAPP_STORE` by `scripts/build-appstore.sh`. Store name: "Sixty — Move Every Hour"; bundle ID `pro.saac.sixty.mas`, so both editions can live on one Mac without sharing an agent or preferences.
 
-- Mac App Store apps must be sandboxed. Sandboxed apps cannot register a `KeepAlive` LaunchAgent, and the CoreAudio process list may be unavailable in the sandbox (not yet tested).
-- App Review guideline 2.4.5 forbids changing standard system behaviour. Disabling Force Quit and having no Quit item are likely rejection reasons.
-- A possible later "App Store edition" with Quit, without the Force Quit block and with a normal Login Item. The core logic already allows it.
+| | GitHub edition | App Store edition |
+|---|---|---|
+| Sandbox | no | yes, no entitlements besides `app-sandbox` (no network, no files) |
+| Start at login | KeepAlive LaunchAgent, restarts if killed | login item, only after the user agreed (first-launch question, menu toggle) |
+| Quit | none (`--disable` in Terminal) | "Quit Sixty…" asks for a fresh random phrase |
+| Lock | full kiosk | full kiosk (owner's decision; App Review may object under 2.5.9) |
+| Updates | silent self-updater | the App Store |
+| Call signals | camera, microphone, speaker | microphone, speaker. In the sandbox CoreMediaIO lists no cameras (tested), and a camera entitlement is not worth a review question: a call with the camera on also uses the microphone |
+
+Both editions have "Take a Break Now" in the menu. It adds a break and never skips one; App Review uses it to see the lock without waiting an hour.
+
+Release steps: `docs/RELEASING.md`, section "Mac App Store".
 
 ## 15. Known limitations
 
@@ -249,4 +258,3 @@ Not in v1. Three decisions conflict with App Store rules:
 ## 17. Open questions
 
 - GitHub owner: personal account `leplik` or an organisation? Custom domain for the site?
-- App Store edition: yes or no, after v1.

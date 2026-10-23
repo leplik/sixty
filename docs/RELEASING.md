@@ -44,3 +44,28 @@ The tap `leplik/homebrew-tap` already exists and holds other casks. The release 
 SIGN_IDENTITY="Developer ID Application: SAAC sp. z o.o. (JVW2N74WL3)" UNIVERSAL=1 VERSION=0.1.0 scripts/build-app.sh
 VERSION=0.1.0 scripts/package-release.sh   # notarizes only if ASC_* variables are set
 ```
+
+## Mac App Store
+
+The App Store edition is built and uploaded from a Mac, not from CI (one upload per version is enough).
+
+One-time setup:
+
+1. Xcode → Settings → Accounts → SAAC team → Manage Certificates → "+" → **Apple Distribution** and **Mac Installer Distribution**.
+2. developer.apple.com → Identifiers → "+" → App ID `pro.saac.sixty.mas` (no capabilities). Profiles → "+" → **Mac App Store Connect** for that App ID → download.
+3. App Store Connect → Apps → "+" → New App: macOS, name "Sixty — Move Every Hour", primary language English (U.S.), bundle ID `pro.saac.sixty.mas`, SKU `sixty-mas`.
+4. App Privacy: "Data Not Collected". Privacy policy URL: `https://leplik.github.io/sixty/privacy.html`. Category: Health & Fitness. Price: free.
+
+Each version:
+
+```sh
+APP_SIGN_IDENTITY="Apple Distribution: SAAC sp. z o.o. (JVW2N74WL3)" \
+INSTALLER_IDENTITY="3rd Party Mac Developer Installer: SAAC sp. z o.o. (JVW2N74WL3)" \
+PROFILE=~/Downloads/Sixty_Mac_App_Store.provisionprofile \
+VERSION=0.1.0 scripts/build-appstore.sh
+xcrun altool --upload-package build/appstore/Sixty-0.1.0.pkg --type macos --apiKey <ASC_KEY_ID> --apiIssuer <ASC_ISSUER_ID>
+```
+
+`altool` looks for the key as `~/.appstoreconnect/private_keys/AuthKey_<ASC_KEY_ID>.p8`. The installer certificate may be named "Mac Installer Distribution: …" instead; `security find-identity -v` shows the exact name.
+
+Review notes to paste: "Sixty locks the screen for 60 seconds once an hour so the user stands up. To see it at once, open the menu bar item and choose Take a Break Now. During the break, the user can leave early by typing the four words shown at the bottom (2 times a day). Sixty does not lock during calls: it reads which apps use the microphone (CoreAudio process list); it never records audio. Quit: menu → Quit Sixty…, then type the phrase."

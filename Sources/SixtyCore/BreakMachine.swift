@@ -107,6 +107,15 @@ public struct BreakMachine: Sendable {
         }
     }
 
+    /// "Take a Break Now" from the menu. More breaks are always allowed; it never skips one.
+    /// The work counter resets when this break ends, as after any break.
+    public mutating func startBreakNow(at now: Date) -> Transition {
+        guard !isOnBreak else { return .none }
+        lastTick = now
+        phase = .onBreak(endsAt: now.addingTimeInterval(timing.breakDuration))
+        return .breakStarted
+    }
+
     /// Ends a break before its time: the emergency phrase or the watchdog.
     /// Returns `false` if no break is running.
     @discardableResult

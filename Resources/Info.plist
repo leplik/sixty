@@ -27,6 +27,8 @@
 	<string>__VERSION__</string>
 	<key>CFBundleVersion</key>
 	<string>__BUILD__</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.healthcare-fitness</string>
 	<key>LSMinimumSystemVersion</key>

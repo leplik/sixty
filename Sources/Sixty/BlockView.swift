@@ -146,18 +146,24 @@ struct EscapeSection: View {
 /// A text field that takes the focus at once and accepts only Latin input sources.
 struct PhraseField: NSViewRepresentable {
     @Binding var text: String
+    /// `true` on the dark lock screen; `false` in a normal window, which follows the system appearance.
+    var onDark = true
     var onChange: (String) -> Void
 
     func makeNSView(context: Context) -> RomanTextField {
         let field = RomanTextField()
         field.delegate = context.coordinator
         field.font = .monospacedSystemFont(ofSize: 14, weight: .regular)
-        field.textColor = .white
-        field.backgroundColor = NSColor.white.withAlphaComponent(0.08)
-        field.drawsBackground = true
-        field.isBordered = false
-        field.focusRingType = .none
         field.alignment = .center
+        if onDark {
+            field.textColor = .white
+            field.backgroundColor = NSColor.white.withAlphaComponent(0.08)
+            field.drawsBackground = true
+            field.isBordered = false
+            field.focusRingType = .none
+        } else {
+            field.bezelStyle = .roundedBezel
+        }
         return field
     }
 
