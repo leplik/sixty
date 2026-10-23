@@ -11,6 +11,8 @@ After 60 minutes of work, Sixty locks every screen for 60 seconds and shows two 
 <a href="https://leplik.github.io/sixty/ru/">По-русски</a>
 </p>
 
+<p align="center"><img src="docs/media/demo.gif" width="800" alt="Sixty in action: a countdown appears in the top-right corner, then the screen locks for two standing exercises, cat-cow and squats, and unlocks again."></p>
+
 ---
 
 Most break reminders have a **Skip** or **Postpone** button. After a week, your hand clicks it before you read the window. Sixty has no such button, no Quit item and no settings. Every 60 minutes you stand up for 60 seconds. If you are in a call, the break waits.
@@ -44,6 +46,11 @@ WORKING ──60 min of work──▶ in a call? ──no──▶ WARNING ─�
 4. After the minute, you are back where you were.
 
 Want to move now? Choose **Take a Break Now** in the menu. It adds a break; there is no button that removes one.
+
+<p align="center">
+<img src="docs/media/lock-en.png" width="49%" alt="The lock screen: Standing cat-cow with an animated figure, a countdown ring at 18 seconds, exercise 1 of 2 and the emergency phrase.">
+<img src="docs/media/call.png" width="49%" alt="During a call the Sixty menu says: Break waits: call in Zoom.">
+</p>
 
 ## Never during a call
 

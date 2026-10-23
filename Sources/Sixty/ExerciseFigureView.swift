@@ -28,6 +28,19 @@ struct FigureStyle {
     )
 }
 
+/// Offscreen renders set the moment to draw instead of following the wall clock: `Sixty --render-media`.
+private struct FigureClockKey: EnvironmentKey {
+    static let defaultValue: TimeInterval? = nil
+}
+
+extension EnvironmentValues {
+    /// Seconds into the figure's loop. nil animates in real time.
+    var figureClock: TimeInterval? {
+        get { self[FigureClockKey.self] }
+        set { self[FigureClockKey.self] = newValue }
+    }
+}
+
 /// The exercise, demonstrated by a looping stick figure. With Reduce Motion it shows a still of the key pose.
 struct ExerciseFigureView: View {
     let exerciseID: String
@@ -35,6 +48,7 @@ struct ExerciseFigureView: View {
 
     @State private var start: Date
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.figureClock) private var clock
 
     /// The loop starts when the view appears. The screens of a break build their views together, so they agree.
     init(exerciseID: String, style: FigureStyle = .lockScreen) {
@@ -44,7 +58,9 @@ struct ExerciseFigureView: View {
     }
 
     var body: some View {
-        if reduceMotion || NSWorkspace.shared.accessibilityDisplayShouldReduceMotion {
+        if let clock {
+            FigureCanvas(frame: FigureAnimations.frame(for: exerciseID, at: clock), style: style)
+        } else if reduceMotion || NSWorkspace.shared.accessibilityDisplayShouldReduceMotion {
             FigureCanvas(frame: FigureAnimations.keyFrame(for: exerciseID), style: style)
         } else {
             // 30 fps is plenty for this motion and keeps two full-screen 6K displays cheap.

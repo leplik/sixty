@@ -1,4 +1,4 @@
-.PHONY: build test app demo probe install icon clean
+.PHONY: build test app demo probe install icon media clean
 
 build:
 	swift build
@@ -24,6 +24,11 @@ install: app
 	rm -rf /Applications/Sixty.app
 	cp -R build/Sixty.app /Applications/
 	open -n /Applications/Sixty.app --args --reregister
+
+# Screenshots, demo video and GIF, App Store screenshots: rendered offscreen by the app itself (~10 s)
+media:
+	swift build -c release
+	.build/release/Sixty --render-media .
 
 icon:
 	swift scripts/make-icon.swift

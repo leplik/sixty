@@ -64,6 +64,8 @@ h1 em{font-style:normal;color:var(--accent-text)}
 .ring b{position:absolute;inset:0;display:grid;place-items:center;font:800 9cqw/1 var(--font);font-variant-numeric:tabular-nums}
 .lock .emerg{font-size:2.15cqw;color:#8F9BA8;margin-top:.6cqw}
 .lock .emerg code{font-family:var(--mono);color:#B9C3CE}
+.mock video{display:block;width:100%;height:auto;aspect-ratio:16/10;border-radius:16px;background:#05080D;
+  box-shadow:0 0 0 1px #223040,0 30px 60px -24px rgba(0,0,0,.7),0 0 80px -30px rgba(255,138,61,.35)}
 .mock figcaption{font-size:.85rem;color:var(--muted);margin-top:10px;text-align:center}
 
 section{padding:56px 0;border-top:1px solid var(--line)}
@@ -76,6 +78,7 @@ h2{font-size:clamp(1.6rem,4.4vw,2.4rem);letter-spacing:-.025em;line-height:1.15;
 .steps p{margin:0;color:var(--muted);font-size:.98rem}
 .note{margin-top:18px;color:var(--muted);font-size:.98rem}
 .two{display:grid;gap:28px}
+.two>*,.faq>*,.steps>*{min-width:0} /* a long command scrolls inside its card, not the page */
 .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px}
 .card h3{margin:0 0 8px;font-size:1.1rem}
 .card p{margin:0 0 10px;color:var(--muted)}

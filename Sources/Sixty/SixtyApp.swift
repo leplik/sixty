@@ -20,6 +20,9 @@ enum SixtyApp {
         if let flag = arguments.firstIndex(of: "--render-figures") {
             exit(FigureSheets.render(to: arguments.indices.contains(flag + 1) ? arguments[flag + 1] : "figures"))
         }
+        if let flag = arguments.firstIndex(of: "--render-media") {
+            exit(MediaRenderer.run(repository: arguments.indices.contains(flag + 1) ? arguments[flag + 1] : "."))
+        }
         if arguments.contains("--version") {
             print(Links.version)
             exit(0)

@@ -96,13 +96,31 @@ struct StepDots: View {
     }
 }
 
+/// Offscreen renders (`Sixty --render-media`) draw one frame at a time and cannot host AppKit views. With this set,
+/// the ring shows an exact, fractional progress and the phrase field is drawn in SwiftUI.
+struct StillLock: Equatable, Sendable {
+    var ringProgress: Double
+}
+
+private struct StillLockKey: EnvironmentKey {
+    static let defaultValue: StillLock? = nil
+}
+
+extension EnvironmentValues {
+    var stillLock: StillLock? {
+        get { self[StillLockKey.self] }
+        set { self[StillLockKey.self] = newValue }
+    }
+}
+
 struct CountdownRing: View {
     let secondsLeft: Int
     let total: Int
     let size: CGFloat
+    @Environment(\.stillLock) private var still
 
     var body: some View {
-        let progress = total > 0 ? CGFloat(secondsLeft) / CGFloat(total) : 0
+        let progress = still.map { CGFloat($0.ringProgress) } ?? (total > 0 ? CGFloat(secondsLeft) / CGFloat(total) : 0)
         ZStack {
             Circle()
                 .stroke(.white.opacity(0.08), lineWidth: size * 0.06)
@@ -122,6 +140,7 @@ struct CountdownRing: View {
 
 struct EscapeSection: View {
     @Bindable var model: BlockModel
+    @Environment(\.stillLock) private var still
 
     var body: some View {
         VStack(spacing: 10) {
@@ -130,8 +149,14 @@ struct EscapeSection: View {
                     .font(.system(size: 13))
                 Text(phrase)
                     .font(.system(size: 15, weight: .medium, design: .monospaced))
-                PhraseField(text: $model.typed) { typed in
-                    if EscapePhrase.matches(typed, phrase) { model.onEscape?() }
+                Group {
+                    if still == nil {
+                        PhraseField(text: $model.typed) { typed in
+                            if EscapePhrase.matches(typed, phrase) { model.onEscape?() }
+                        }
+                    } else {
+                        PhraseLookAlike(text: model.typed)
+                    }
                 }
                 .frame(width: 360, height: 26)
             } else {
@@ -140,6 +165,24 @@ struct EscapeSection: View {
             }
         }
         .foregroundStyle(.white.opacity(0.45))
+    }
+}
+
+/// What `PhraseField` looks like on the lock screen, with the focus in it: for offscreen renders.
+struct PhraseLookAlike: View {
+    let text: String
+
+    var body: some View {
+        HStack(spacing: 1) {
+            Text(text)
+                .font(.system(size: 14, design: .monospaced))
+                .foregroundStyle(.white)
+            Rectangle()
+                .fill(.white)
+                .frame(width: 1.5, height: 16)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.white.opacity(0.08))
     }
 }
 
