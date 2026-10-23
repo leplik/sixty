@@ -35,7 +35,7 @@ jobs:
       BUILD_NUMBER: ${{ github.run_number }}
       HOMEBREW_TAP_DEPLOY_KEY: ${{ secrets.HOMEBREW_TAP_DEPLOY_KEY }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Test
         run: swift test
