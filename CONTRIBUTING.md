@@ -4,7 +4,7 @@ Thank you for helping. Sixty is small on purpose, so please read the principles 
 
 ## Scope
 
-- **Welcome:** call apps that Sixty does not detect, bugs, translations, exercises, accessibility, macOS compatibility.
+- **Welcome:** call apps that Sixty does not detect, bugs, exercises, accessibility, macOS compatibility.
 - **Not wanted:** settings, a Skip or Postpone button, a Quit item, configurable timings. Sixty exists because those features get used on autopilot. Please open an issue first if you are not sure.
 
 ## Add a call app
@@ -18,7 +18,7 @@ Thank you for helping. Sixty is small on purpose, so please read the principles 
 
 - `make test` runs the unit tests (Swift Testing). All logic lives in `SixtyCore` and has tests; write the test first.
 - `make demo` runs a short cycle (20 s work, 5 s warning, 10 s break) without the login agent. Stop it with Ctrl+C in the terminal.
-- UI text: the key is the English text. Add the Russian text to `Resources/ru.lproj/Localizable.strings`.
+- UI text goes through `L()`; the key is the English text. Sixty is English only.
 
 ## Commits and releases
 

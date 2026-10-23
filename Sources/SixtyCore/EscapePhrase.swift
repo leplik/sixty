@@ -18,25 +18,15 @@ public enum EscapePhrase {
         return make(using: &rng)
     }
 
-    /// Ignores case and extra spaces. Cyrillic letters count as the Latin key at the same position,
-    /// so a phrase typed with a Russian, Ukrainian or Belarusian layout still matches.
+    /// Ignores case and extra spaces. The text field accepts only Latin input sources, so no layout mapping is needed.
     public static func matches(_ typed: String, _ phrase: String) -> Bool {
         let typed = normalize(typed)
         return !typed.isEmpty && typed == normalize(phrase)
     }
 
     static func normalize(_ text: String) -> String {
-        let latin = String(text.lowercased().map { keyPosition[$0] ?? $0 })
-        return latin.split(whereSeparator: \.isWhitespace).joined(separator: " ")
+        text.lowercased().split(whereSeparator: \.isWhitespace).joined(separator: " ")
     }
-
-    /// ЙЦУКЕН → QWERTY for the letter keys.
-    private static let keyPosition: [Character: Character] = {
-        var map = Dictionary(uniqueKeysWithValues: zip("йцукенгшщзфывапролдячсмить", "qwertyuiopasdfghjklzxcvbnm"))
-        map["і"] = "s" // Ukrainian and Belarusian, on the Russian "ы" key
-        map["ў"] = "o" // Belarusian, on the Russian "щ" key
-        return map
-    }()
 
     /// Short, common, unambiguous English words. Lowercase a–z only, 4–8 letters.
     public static let words: [String] = [

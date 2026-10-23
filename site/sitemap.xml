@@ -1,25 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://leplik.github.io/sixty/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://leplik.github.io/sixty/"/>
-    <xhtml:link rel="alternate" hreflang="ru" href="https://leplik.github.io/sixty/ru/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://leplik.github.io/sixty/"/>
-  </url>
-  <url>
-    <loc>https://leplik.github.io/sixty/ru/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://leplik.github.io/sixty/"/>
-    <xhtml:link rel="alternate" hreflang="ru" href="https://leplik.github.io/sixty/ru/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://leplik.github.io/sixty/"/>
   </url>
   <url>
     <loc>https://leplik.github.io/sixty/privacy.html</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://leplik.github.io/sixty/privacy.html"/>
-    <xhtml:link rel="alternate" hreflang="ru" href="https://leplik.github.io/sixty/ru/privacy.html"/>
-  </url>
-  <url>
-    <loc>https://leplik.github.io/sixty/ru/privacy.html</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://leplik.github.io/sixty/privacy.html"/>
-    <xhtml:link rel="alternate" hreflang="ru" href="https://leplik.github.io/sixty/ru/privacy.html"/>
   </url>
 </urlset>

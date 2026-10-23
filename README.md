@@ -7,8 +7,7 @@ After 60 minutes of work, Sixty locks every screen for 60 seconds and shows two 
 
 <p align="center">
 <a href="https://github.com/leplik/sixty/releases/latest">Download</a> ·
-<a href="https://leplik.github.io/sixty/">Website</a> ·
-<a href="https://leplik.github.io/sixty/ru/">По-русски</a>
+<a href="https://leplik.github.io/sixty/">Website</a>
 </p>
 
 <p align="center"><img src="docs/media/demo.gif" width="800" alt="Sixty in action: a countdown appears in the top-right corner, then the screen locks for two standing exercises, cat-cow and squats, and unlocks again."></p>
@@ -48,7 +47,7 @@ WORKING ──60 min of work──▶ in a call? ──no──▶ WARNING ─�
 Want to move now? Choose **Take a Break Now** in the menu. It adds a break; there is no button that removes one.
 
 <p align="center">
-<img src="docs/media/lock-en.png" width="49%" alt="The lock screen: Standing cat-cow with an animated figure, a countdown ring at 18 seconds, exercise 1 of 2 and the emergency phrase.">
+<img src="docs/media/lock.png" width="49%" alt="The lock screen: Standing cat-cow with an animated figure, a countdown ring at 18 seconds, exercise 1 of 2 and the emergency phrase.">
 <img src="docs/media/call.png" width="49%" alt="During a call the Sixty menu says: Break waits: call in Zoom.">
 </p>
 

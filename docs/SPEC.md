@@ -119,7 +119,7 @@ Lock screen content:
 - The main lock window shows a phrase of 4 random words, for example `river candle orbit maple`, and a text field.
 - If you type the phrase, the break ends at once. The phrase is new for every break, so you cannot learn it and type it on autopilot.
 - 2 exits per day. After that, the field is gone and the window says so.
-- The text field accepts only Latin input sources (`NSAllRomanInputSourcesLocaleIdentifier`). As a fallback, Sixty maps Cyrillic letters to the Latin key at the same position (ЙЦУКЕН → QWERTY). So a phrase typed with a Russian layout still matches.
+- The text field accepts only Latin input sources (`NSAllRomanInputSourcesLocaleIdentifier`), so the phrase can be typed whatever keyboard layout is active.
 - Case and extra spaces are ignored.
 
 ## 7. Menu bar
@@ -157,7 +157,7 @@ process starts
 
 ## 10. Localisation
 
-English and Russian. Code, comments and docs are in English. UI strings use English keys; `ru.lproj/Localizable.strings` holds the Russian text.
+English only: the app, the website, the docs and the store listing. UI strings go through `L()` with the English text as the key.
 
 ## 11. Project layout
 
@@ -172,7 +172,7 @@ Sources/SixtyCore/            pure logic, fully unit-tested
   Timing.swift                fixed durations, demo durations
 Sources/Sixty/                macOS adapters and UI
 Tests/SixtyCoreTests/         Swift Testing
-Resources/                    Info.plist, LaunchAgent plist, localisations, icon
+Resources/                    Info.plist, LaunchAgent plist, entitlements, icon
 scripts/build-app.sh          builds, bundles and signs Sixty.app
 site/                         GitHub Pages website
 .github/workflows/            CI, release, pages
@@ -212,7 +212,7 @@ every 12 h (1 h after a failed check)
 ## 13. Website, SEO and GEO
 
 - Static site in `site/`, deployed to GitHub Pages by a workflow. Default URL: `https://leplik.github.io/sixty/`.
-- One fast page per language (English, Russian) with `hreflang`. No frameworks, no trackers.
+- One fast English page plus a privacy page. No frameworks, no trackers.
 - SEO: unique title and description, canonical URL, Open Graph and Twitter cards, `sitemap.xml`, `robots.txt`, JSON-LD `SoftwareApplication` (free, macOS) and `FAQPage`.
 - GEO (answers in AI assistants): `llms.txt` with a plain-text summary, short factual answers in the FAQ, a clear "how it works" section, and explicit facts (price, platform, permissions, licence). The README repeats the same facts.
 - Repository metadata: description, homepage and topics (`macos`, `break-reminder`, `stand-up-reminder`, `stretch`, `screen-lock`, `menu-bar-app`, `swift`, `productivity`, `health`).
@@ -251,7 +251,7 @@ Release steps: `docs/RELEASING.md`, section "Mac App Store".
 - [ ] Meet with both microphone and camera off: does Chrome still hold the microphone?
 - [ ] Teams open without a call: is the speaker signal off?
 - [ ] Dictation in Handy at break time: the break is not postponed.
-- [ ] Emergency phrase with Russian and English layouts; the limit of 2 per day.
+- [ ] Emergency phrase with a non-Latin keyboard layout active; the limit of 2 per day.
 - [ ] `kill` during the warning: launchd starts Sixty again and the warning comes back.
 - [ ] `--disable` turns it off; opening Sixty.app turns it on.
 

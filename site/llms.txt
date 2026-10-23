@@ -16,7 +16,7 @@
 - Multiple monitors: every screen is locked; the emergency phrase field is on the main screen only.
 - Privacy: no telemetry, no audio capture, no permission prompts (no microphone, camera or Accessibility access). It reads only "device is in use" flags.
 - Updates: twice a day Sixty asks the GitHub Releases API for a newer version. That is its only network request, and it sends nothing about the user. Updates install silently between breaks, only if signed with the developer's Apple Developer ID.
-- Languages: English and Russian.
+- Language: English.
 
 ## Install
 
@@ -26,7 +26,6 @@
 ## Links
 
 - [Website (English)](https://leplik.github.io/sixty/): overview, how it works, FAQ
-- [Website (Russian)](https://leplik.github.io/sixty/ru/): the same in Russian
 - [Source code and README](https://github.com/leplik/sixty): MIT licensed
 - [Releases](https://github.com/leplik/sixty/releases/latest): downloads
 

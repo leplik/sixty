@@ -1,17 +1,9 @@
 import AppKit
-import os
 import SwiftUI
 
-/// Localised UI text. Keys are the English strings; `ru.lproj/Localizable.strings` holds Russian.
+/// UI text. Sixty is English only; the key is the text. One function keeps every UI string easy to find.
 func L(_ key: String) -> String {
-    if let forced = Localization.forced.withLock({ $0 }) { return forced[key] ?? key }
-    return NSLocalizedString(key, comment: "")
-}
-
-/// Offscreen renders (`Sixty --render-media`) draw each language in turn, whatever the system language is.
-enum Localization {
-    /// nil follows the system. A table replaces the bundle's strings; keys it lacks stay English.
-    static let forced = OSAllocatedUnfairLock<[String: String]?>(initialState: nil)
+    NSLocalizedString(key, comment: "")
 }
 
 enum Links {

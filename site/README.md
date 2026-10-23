@@ -1,9 +1,9 @@
 # Sixty website
 
-Static site for GitHub Pages: `index.html` (English), `ru/index.html` (Russian), shared `assets/`. No build step, no third-party requests.
+Static site for GitHub Pages: `index.html`, `privacy.html`, `404.html`, shared `assets/`. English only. No build step, no third-party requests.
 
-- Preview: `python3 -m http.server -d site 8765`, then open <http://localhost:8765/> (and `/ru/`).
-- The base URL `https://leplik.github.io/sixty/` is hard-coded in both pages (`canonical`, `hreflang`, `og:*`, `twitter:*`, JSON-LD), `sitemap.xml`, `robots.txt`, `llms.txt` and `404.html` (`<base href>`).
+- Preview: `python3 -m http.server -d site 8765`, then open <http://localhost:8765/>.
+- The base URL `https://leplik.github.io/sixty/` is hard-coded in the pages (`canonical`, `og:*`, `twitter:*`, JSON-LD), `sitemap.xml`, `robots.txt`, `llms.txt` and `404.html` (`<base href>`).
 - To change it (custom domain, other owner): `grep -rl 'leplik.github.io/sixty' site` and replace the string in those files. For the repo links replace `github.com/leplik/sixty` the same way.
 - Asset URLs are relative, so the site works under the `/sixty/` sub-path. With a custom domain at the root, also add `site/CNAME`.
 - The FAQ text and its `FAQPage` JSON-LD must stay identical: edit both together.

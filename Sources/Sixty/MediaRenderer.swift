@@ -6,12 +6,11 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 // `Sixty --render-media [repository]` draws the marketing media offscreen from the app's own SwiftUI views:
-// no screen recording, nothing from the real desktop, the same pictures on every run. It reads the Russian strings
-// and the icon from the repository (default: the current directory) and writes
-//   docs/media/                              lock-en.png, lock-ru.png, warning.png, call.png, exercises.png,
-//                                            demo.mp4, demo.gif
-//   packaging/appstore/screenshots/{en,ru}/  1-lock.jpg … 5-exercises.jpg, 2880×1800 with captions
-//   site/assets/                             demo.mp4, demo-ru.mp4, demo-poster.jpg, demo-poster-ru.jpg
+// no screen recording, nothing from the real desktop, the same pictures on every run. It reads the icon from the
+// repository (default: the current directory) and writes
+//   docs/media/                          lock.png, warning.png, call.png, exercises.png, demo.mp4, demo.gif
+//   packaging/appstore/screenshots/en/   1-lock.jpg … 5-exercises.jpg, 2880×1800 with captions
+//   site/assets/                         demo.mp4, demo-poster.jpg
 //
 // Every scene is laid out in points on a 1440×900 canvas, a 16:10 screen, and rendered at the output size.
 // Add `--stills-only` to skip the video and the GIF while iterating on a picture.
@@ -22,60 +21,45 @@ enum MediaRenderer {
 
     static func run(repository path: String) -> Int32 {
         let root = URL(fileURLWithPath: path, isDirectory: true)
-        let strings = root.appendingPathComponent("Resources/ru.lproj/Localizable.strings")
-        guard let icon = NSImage(contentsOf: root.appendingPathComponent("site/assets/icon-512.png")),
-              let russian = NSDictionary(contentsOf: strings) as? [String: String]
-        else {
+        guard let icon = NSImage(contentsOf: root.appendingPathComponent("site/assets/icon-512.png")) else {
             print("Run this from the repository root, or pass it: Sixty --render-media <repository>")
             return 1
         }
         let media = root.appendingPathComponent("docs/media")
         let site = root.appendingPathComponent("site/assets")
+        let screenshots = root.appendingPathComponent("packaging/appstore/screenshots/en")
         let moving = !CommandLine.arguments.contains("--stills-only")
         do {
-            for language in [MediaCopy.english, MediaCopy.russian] {
-                Localization.forced.withLock { $0 = language.code == "ru" ? russian : [:] }
-                let studio = try Studio(copy: language, icon: icon)
-                let screenshots = root.appendingPathComponent("packaging/appstore/screenshots/\(language.code)")
-                try FileManager.default.createDirectory(at: screenshots, withIntermediateDirectories: true)
-                try FileManager.default.createDirectory(at: media, withIntermediateDirectories: true)
+            let studio = try Studio(copy: .english, icon: icon)
+            try FileManager.default.createDirectory(at: screenshots, withIntermediateDirectories: true)
+            try FileManager.default.createDirectory(at: media, withIntermediateDirectories: true)
 
-                try write(png: studio.lockStill(), to: media.appendingPathComponent("lock-\(language.code).png"))
-                // JPEG: App Store Connect takes it, it has no alpha channel, and the gradients would make PNGs heavy.
-                for (index, shot) in studio.appStoreShots().enumerated() {
-                    try write(jpeg: shot.view, size: CGSize(width: 2880, height: 1800), quality: 0.9,
-                              to: screenshots.appendingPathComponent("\(index + 1)-\(shot.name).jpg"))
-                }
-                let suffix = language.code == "en" ? "" : "-\(language.code)"
-                try write(jpeg: studio.lockStill(), size: CGSize(width: 1280, height: 800),
-                          to: site.appendingPathComponent("demo-poster\(suffix).jpg"))
-                if moving {
-                    let video = site.appendingPathComponent("demo\(suffix).mp4")
-                    try writeVideo(studio.storyboard(compact: false), to: video)
-                }
-
-                if language.code == "en" {
-                    // The wallpaper's gradients make large PNGs; the README shows these small anyway.
-                    try write(png: studio.desktop(.warning), width: 1920, height: 1200,
-                              to: media.appendingPathComponent("warning.png"))
-                    try write(png: studio.desktop(.call(camera: false)), width: 1920, height: 1200,
-                              to: media.appendingPathComponent("call.png"))
-                    try write(png: studio.exerciseGrid(title: true), to: media.appendingPathComponent("exercises.png"))
-                    if moving {
-                        try writeGIF(studio.storyboard(compact: true), to: media.appendingPathComponent("demo.gif"))
-                        let video = media.appendingPathComponent("demo.mp4")
-                        try? FileManager.default.removeItem(at: video)
-                        try FileManager.default.copyItem(at: site.appendingPathComponent("demo.mp4"), to: video)
-                    }
-                }
-                print("\(language.code): done")
+            try write(png: studio.lockStill(), to: media.appendingPathComponent("lock.png"))
+            // JPEG: App Store Connect takes it, it has no alpha channel, and the gradients would make PNGs heavy.
+            for (index, shot) in studio.appStoreShots().enumerated() {
+                try write(jpeg: shot.view, size: CGSize(width: 2880, height: 1800), quality: 0.9,
+                          to: screenshots.appendingPathComponent("\(index + 1)-\(shot.name).jpg"))
+            }
+            try write(jpeg: studio.lockStill(), size: CGSize(width: 1280, height: 800),
+                      to: site.appendingPathComponent("demo-poster.jpg"))
+            // The wallpaper's gradients make large PNGs; the README shows these small anyway.
+            try write(png: studio.desktop(.warning), width: 1920, height: 1200,
+                      to: media.appendingPathComponent("warning.png"))
+            try write(png: studio.desktop(.call(camera: false)), width: 1920, height: 1200,
+                      to: media.appendingPathComponent("call.png"))
+            try write(png: studio.exerciseGrid(title: true), to: media.appendingPathComponent("exercises.png"))
+            if moving {
+                let video = site.appendingPathComponent("demo.mp4")
+                try writeVideo(studio.storyboard(compact: false), to: video)
+                try writeGIF(studio.storyboard(compact: true), to: media.appendingPathComponent("demo.gif"))
+                let copy = media.appendingPathComponent("demo.mp4")
+                try? FileManager.default.removeItem(at: copy)
+                try FileManager.default.copyItem(at: video, to: copy)
             }
         } catch {
-            Localization.forced.withLock { $0 = nil }
             print("Rendering failed: \(error)")
             return 1
         }
-        Localization.forced.withLock { $0 = nil }
         print("Media written under \(root.path)")
         return 0
     }
@@ -266,9 +250,8 @@ final class VideoWriter {
 
 // MARK: - Words
 
-/// Marketing text and the fake desktop's words, per language. App texts come from `L()`.
+/// Marketing text and the fake desktop's words. App texts come from `L()`.
 struct MediaCopy {
-    let code: String
     let menuBar: [String]
     let windowTitle: String
     let callTitle: String
@@ -283,7 +266,6 @@ struct MediaCopy {
     let website: String
 
     static let english = MediaCopy(
-        code: "en",
         menuBar: ["Editor", "File", "Edit", "View", "Window", "Help"],
         windowTitle: "project — Editor",
         callTitle: "Call",
@@ -302,32 +284,11 @@ struct MediaCopy {
         facts: "Free · Open source · macOS 14+",
         website: "leplik.github.io/sixty"
     )
-
-    static let russian = MediaCopy(
-        code: "ru",
-        menuBar: ["Редактор", "Файл", "Правка", "Вид", "Окно", "Справка"],
-        windowTitle: "проект — Редактор",
-        callTitle: "Звонок",
-        clock: "Чт 10:42",
-        captions: [
-            ("Минута каждый час.", "Встань и разомнись."),
-            ("Сначала спина:", "кошка-корова, прогибы, наклоны"),
-            ("Не мешает созвонам —", "перерыв подождёт"),
-            ("Кнопки «Пропустить» нет.", "Только фраза, которую не набрать на автомате."),
-            ("22 упражнения стоя,", "и каждое — в движении"),
-        ],
-        gridTitle: "22 упражнения стоя",
-        spineSection: "Первые 30 секунд · спина и поясница",
-        otherSection: "Следующие 30 секунд · всё остальное",
-        tagline: "Раз в час — встать и размяться. Никогда во время звонка.",
-        facts: "Бесплатно · Открытый код · macOS 14+",
-        website: "leplik.github.io/sixty/ru"
-    )
 }
 
 // MARK: - Scenes
 
-/// Builds every scene of one language.
+/// Builds every scene.
 @MainActor
 struct Studio {
     let copy: MediaCopy

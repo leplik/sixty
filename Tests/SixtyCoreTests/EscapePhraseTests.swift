@@ -49,16 +49,4 @@ struct EscapePhraseTests {
         #expect(!EscapePhrase.matches("candle river orbit maple", "river candle orbit maple"))
         #expect(!EscapePhrase.matches("", "river candle orbit maple"))
     }
-
-    @Test func russianLayoutTypingMatchesByKeyPosition() {
-        // "river candle" typed with the Russian ЙЦУКЕН layout active.
-        #expect(EscapePhrase.matches("кшмук сфтвду", "river candle"))
-        #expect(EscapePhrase.matches("КШМУК СФТВДУ", "river candle"))
-    }
-
-    @Test func belarusianAndUkrainianLettersMap() {
-        // "is" → Belarusian/Ukrainian "і" sits on the S key, "ў" on the O key.
-        #expect(EscapePhrase.normalize("ш і") == "i s")
-        #expect(EscapePhrase.normalize("ў") == "o")
-    }
 }
