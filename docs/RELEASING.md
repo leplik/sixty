@@ -49,25 +49,38 @@ VERSION=0.1.0 scripts/package-release.sh   # notarizes only if ASC_* variables a
 
 ## Mac App Store
 
-The App Store edition is built and uploaded from a Mac, not from CI (one upload per version is enough).
+App: "Sixty — Move Every Hour", Apple ID `6826310117`, bundle ID `pro.saac.sixty.mas`, SKU `sixty-mas`, team SAAC (`JVW2N74WL3`, provider public ID `a9ee9ba6-fcc9-451a-ac55-1e1734c8a244`). The App Store edition is built and uploaded from a Mac, not from CI.
 
-One-time setup:
+Already set up (2026-10-23): certificates "Apple Distribution: SAAC sp. z o.o." and "3rd Party Mac Developer Installer: SAAC sp. z o.o." in the login keychain, App ID `pro.saac.sixty.mas`, profile "Sixty Mac App Store" (expires 2027-10-23), the app record with listing, screenshots, age rating, "Data Not Collected", free in all regions. Listing texts: `packaging/appstore/metadata/en/`; screenshots: `packaging/appstore/screenshots/en/` (`make media`).
 
-1. Xcode → Settings → Accounts → SAAC team → Manage Certificates → "+" → **Apple Distribution** and **Mac Installer Distribution**.
-2. developer.apple.com → Identifiers → "+" → App ID `pro.saac.sixty.mas` (no capabilities). Profiles → "+" → **Mac App Store Connect** for that App ID → download.
-3. App Store Connect → Apps → "+" → New App: macOS, name "Sixty — Move Every Hour", primary language English (U.S.), bundle ID `pro.saac.sixty.mas`, SKU `sixty-mas`.
-4. App Privacy: "Data Not Collected". Privacy policy URL: `https://leplik.github.io/sixty/privacy.html`. Category: Health & Fitness. Price: free.
+Upload password: an app-specific password of `dev@saac.pro`, stored as the generic keychain item `SIXTY_ALTOOL`. `altool --store-password-in-keychain-item` fails on Xcode 26 ("Expected item argument is missing"), and `-p @keychain:` does not find items made by `security`, so the password goes through an environment variable:
 
-Each version:
+```sh
+security add-generic-password -U -s SIXTY_ALTOOL -a dev@saac.pro -w   # once; prompts for the password
+```
+
+Each version (raise `VERSION`; the build number is a timestamp):
 
 ```sh
 APP_SIGN_IDENTITY="Apple Distribution: SAAC sp. z o.o. (JVW2N74WL3)" \
 INSTALLER_IDENTITY="3rd Party Mac Developer Installer: SAAC sp. z o.o. (JVW2N74WL3)" \
 PROFILE=~/Downloads/Sixty_Mac_App_Store.provisionprofile \
-VERSION=0.1.0 scripts/build-appstore.sh
-xcrun altool --upload-package build/appstore/Sixty-0.1.0.pkg --type macos --apiKey <ASC_KEY_ID> --apiIssuer <ASC_ISSUER_ID>
+VERSION=0.1.1 scripts/build-appstore.sh
+
+BV=$(plutil -extract CFBundleVersion raw build/appstore/Sixty.app/Contents/Info.plist)
+ALTOOL_PW="$(security find-generic-password -s SIXTY_ALTOOL -a dev@saac.pro -w)" \
+xcrun altool --upload-package build/appstore/Sixty-0.1.1.pkg --type macos \
+  --apple-id 6826310117 --bundle-id pro.saac.sixty.mas \
+  --bundle-version "$BV" --bundle-short-version-string 0.1.1 \
+  --provider-public-id a9ee9ba6-fcc9-451a-ac55-1e1734c8a244 \
+  -u dev@saac.pro -p @env:ALTOOL_PW
 ```
 
-`altool` looks for the key as `~/.appstoreconnect/private_keys/AuthKey_<ASC_KEY_ID>.p8`. The installer certificate may be named "Mac Installer Distribution: …" instead; `security find-identity -v` shows the exact name.
+Then App Store Connect → the version page: set the same version number, pick the processed build, "Add for Review".
 
-Listing texts (name, subtitle, promotional text, description, keywords, URLs, copyright, review notes) are in `packaging/appstore/metadata/en/`, checked against Apple's length limits. Screenshots: `packaging/appstore/screenshots/en/` (`make media` renders them).
+Traps:
+- Error 91109 "com.apple.quarantine": a profile downloaded with a browser is quarantined. `build-appstore.sh` clears all extended attributes before signing.
+- `plutil -insert` reads dots in a key as nesting; entitlement keys are escaped in the script.
+- The App Store version number must equal the build's `CFBundleShortVersionString`.
+
+Review notes: `packaging/appstore/metadata/en/review_notes.txt`.
